@@ -44,4 +44,65 @@ export class HashMap {
 		}
 		return null
 	}
+
+	has(key) {
+		let hashCode = this.#hash(key)
+
+		if (hashCode < 0 || hashCode >= this.#capacity) {
+			throw new Error('Trying to access index out of bound')
+		}
+
+		if (this.#buckets[hashCode] && this.#buckets[hashCode][0] === key) return true
+		return false
+	}
+
+	remove(key) {
+		let hashCode = this.#hash(key)
+
+		if (hashCode < 0 || hashCode >= this.#capacity) {
+			throw new Error('Trying to access index out of bound')
+		}
+
+		if (this.#buckets[hashCode] && this.#buckets[hashCode][0] === key) {
+			this.#buckets[hashCode] = null
+			return true
+		}
+		return false
+	}
+
+	length() {
+		let result = 0
+		for (let i = 0; i < this.#capacity; i++) {
+			if (this.#buckets[i]) result++
+		}
+		return result
+	}
+
+	clear() {
+		this.#buckets = []
+	}
+
+	keys() {
+		let result = []
+		for (let i = 0; i < this.#capacity; i++) {
+			if (this.#buckets[i]) result.push(this.#buckets[i][0])
+		}
+		return result
+	}
+
+	values() {
+		let result = []
+		for (let i = 0; i < this.#capacity; i++) {
+			if (this.#buckets[i]) result.push(this.#buckets[i][1])
+		}
+		return result
+	}
+
+	entries() {
+		let result = []
+		for (let i = 0; i < this.#capacity; i++) {
+			if (this.#buckets[i]) result.push([this.#buckets[i][0], this.#buckets[i][1]])
+		}
+		return result
+	}
 }
